@@ -1,0 +1,39 @@
+﻿<h1>Posts</h1>
+<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Post</a>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th style="width: 30%">Domain</th>
+            <th style="width: 30%">Requirements</th>
+            <th style="width: 30%">Duration</th>
+            <th style="width: 30%">Number Of Applicants</th>
+            <th style="width: 30%">Paid</th>
+            <th style="width: 30%">Information</th>
+            <th style="width: 30%">Company Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let post of posts">
+            <td>{{post.domain}}</td>
+            <td>{{post.requirements}}</td>
+            <td>{{post.duration}}</td>
+            <td>{{post.numberOfApplicants}}</td>
+            <td>{{post.paid}}</td>
+            <td>{{post.requirements}}</td>
+            <td>{{post.Information}}</td>
+            <td>{{post.companyEmail}}</td>
+            <td style="white-space: nowrap">
+                <a routerLink="edit/{{post.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
+                <button (click)="deletePost(post.id)" class="btn btn-sm btn-danger" [disabled]="post.isDeleting">
+                    <span *ngIf="post.isDeleting" class="spinner-border spinner-border-sm"></span>
+                    <span *ngIf="!post.isDeleting">Delete</span>
+                </button>
+            </td>
+        </tr>
+        <tr *ngIf="!posts">
+            <td colspan="4" class="text-center">
+                <span class="spinner-border spinner-border-lg align-center"></span>
+            </td>
+        </tr>
+    </tbody>
+</table>

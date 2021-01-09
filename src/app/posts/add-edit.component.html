@@ -1,0 +1,27 @@
+﻿<h1 *ngIf="isAddMode">Add Post</h1>
+<h1 *ngIf="!isAddMode">Edit Post</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="domain">Domain</label>
+            <input type="text" formControlName="domain" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.domain.errors }" />
+            <div *ngIf="submitted && f.domain.errors" class="invalid-feedback">
+                <div *ngIf="f.domain.errors.required">Domain is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="requirements">Requirements</label>
+            <input type="text" formControlName="requirements" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.requirements.errors }" />
+            <div *ngIf="submitted && f.requirements.errors" class="invalid-feedback">
+                <div *ngIf="f.requirements.errors.required">Requirements is required</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+            Save
+        </button>
+        <a routerLink="/posts" class="btn btn-link">Cancel</a>
+    </div>
+</form>
