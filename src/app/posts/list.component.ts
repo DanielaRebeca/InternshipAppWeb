@@ -5,19 +5,23 @@ import { AccountService, AlertService } from '@app/_services';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
-    posts = null;
+    posts: any = [];
     userId = 0;
     userType: string = '';
 
     constructor(private accountService: AccountService, private alertService: AlertService) {}
 
     ngOnInit() {
-        console.log(this.posts);
-        this.userId = JSON.parse(localStorage.getItem('user')).id
-        this.getUserType(this.userId);
-        this.accountService.getAll()
+        this.userId = JSON.parse(localStorage.getItem('user')).id;
+        this.userType = JSON.parse(localStorage.getItem('user')).type;
+        this.accountService.getPostById(this.userId, this.userType)
             .pipe(first())
-            .subscribe(posts => this.posts = posts);
+            .subscribe(posts => {
+                if (this.posts) {
+                    this.posts = posts;
+                }
+            });
+
     }
 
     deletePost(id: string) {
@@ -26,28 +30,21 @@ export class ListComponent implements OnInit {
         this.accountService.deletePost(id)
             .pipe(first())
             .subscribe(() => {
-                this.posts = this.posts.filter(x => x.id !== id) 
+                this.posts = this.posts.filter(x => x.id !== id);
             });
     }
 
-    getUserType(id) {
-        this.accountService.getUserType(id).subscribe(result => {
-            if (result == 'student')
-                this.userType == 'student';
-            else
-                this.userType == 'company';
-        })
-        this.userType = 'student';
-    }
-
     applyToPost(id) {
-        this.accountService.applyToPost(id, this.userId).subscribe(result => {
-            if(result){
+        var applyToPost = {
+            userid: null
+        };
+        applyToPost.userid = this.userId;
+        this.accountService.applyToPost(id, applyToPost).subscribe(
+            data => {
                 this.alertService.success("You have succesfully applied to this post!");
-            }
-            else {
-                this.alertService.error("Something went wrong!");
-            }
-        })
+            },
+            error => {
+                this.alertService.error(error);
+            });
     }
 }

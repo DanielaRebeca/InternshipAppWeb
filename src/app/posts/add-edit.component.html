@@ -4,7 +4,15 @@
     <div class="form-row">
         <div class="form-group col">
             <label for="domain">Domain</label>
-            <input type="text" formControlName="domain" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.domain.errors }" />
+            <select class="form-control" formControlName="domain" [ngClass]="{ 'is-invalid': submitted && f.domain.errors }">
+                <option value="COMPUTERSCIENCE">Computer Science</option>
+                <option value="MEDICINE">Medicine</option>
+                <option value="PHYSICS">Physics</option>
+                <option value="BIOLOGY">Biology</option>
+                <option value="ECONOMICS">Economics</option>
+                <option value="DESIGN">Design</option>
+            </select>
+            <!-- <input type="text" formControlName="domain" class="form-control"  /> -->
             <div *ngIf="submitted && f.domain.errors" class="invalid-feedback">
                 <div *ngIf="f.domain.errors.required">Domain is required</div>
             </div>
@@ -29,7 +37,7 @@
             <label for="numberOfApplicants">Number Of Applicants</label>
             <input type="number" formControlName="numberOfApplicants" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.numberOfApplicants.errors }" />
             <div *ngIf="submitted && f.numberOfApplicants.errors" class="invalid-feedback">
-                <div *ngIf="f.numberOfApplicants.errors.required">Number Of Applicants</div>
+                <div>Number Of Applicants</div>
             </div>
         </div>
     </div>

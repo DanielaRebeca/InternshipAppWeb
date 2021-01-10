@@ -1,6 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -14,6 +14,7 @@ export class AccountService {
     public user: Observable<User>;
     private postSubject: BehaviorSubject<Post>;
     public post: Observable<Post>;
+    public map: Observable<Object>;
 
     constructor(
         private router: Router,
@@ -33,8 +34,8 @@ export class AccountService {
         return this.postSubject.value;
     }
 
-    login(username, password) {
-        return this.http.post<User>(`${environment.apiUrl}/user/login`, { username, password })
+    login(email, password) {
+        return this.http.post<User>(`${environment.apiUrl}/user/authenticate`, { email, password })
             .pipe(map(user => {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
                 localStorage.setItem('user', JSON.stringify(user));
@@ -55,7 +56,7 @@ export class AccountService {
     }
 
     createPost(post: Post) {
-        return this.http.post(`${environment.apiUrl}/post/create`, post);
+        return this.http.post(`${environment.apiUrl}/post`, post);
     }
 
     getAll() {
@@ -67,18 +68,27 @@ export class AccountService {
     }
 
     getAllPosts() {
-        return this.http.get<User[]>(`${environment.apiUrl}/posts`);
+        return this.http.get<User[]>(`${environment.apiUrl}/post`);
     }
 
-    getPostById(id: string) {
-        return this.http.get<Post>(`${environment.apiUrl}/post/${id}`);
+    getPostById(id, userType) {
+        return this.http.get<Post>(`${environment.apiUrl}/post/${id}/${userType}`);
     }
 
-    update(id, params) {
-        return this.http.put(`${environment.apiUrl}/user/${id}`, params)
+    getOnePostById(id) {
+        return this.http.get<Post>(`${environment.apiUrl}/post/find/${id}`);
+    }
+
+    update(userId, params) {
+        // const headers = {
+        //     headers: new HttpHeaders({
+        //       'Access-Control-Allow-Origin': ''
+        //     })
+        //   };
+        return this.http.post(`${environment.apiUrl}/user/update/${userId}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
-                if (id == this.userValue.id) {
+                if (userId == this.userValue.id) {
                     // update local storage
                     const user = { ...this.userValue, ...params };
                     localStorage.setItem('user', JSON.stringify(user));
@@ -91,7 +101,7 @@ export class AccountService {
     }
 
     delete(id: string) {
-        return this.http.delete(`${environment.apiUrl}/user/${id}`)
+        return this.http.post(`${environment.apiUrl}/user/delete/${id}`, id)
             .pipe(map(x => {
                 // auto logout if the logged in user deleted their own record
                 if (id == this.userValue.id) {
@@ -102,43 +112,27 @@ export class AccountService {
     }
 
     updatePost(id, params) {
-        return this.http.put(`${environment.apiUrl}/post/${id}`, params)
-            .pipe(map(x => {
-                // update stored user if the logged in user updated their own record
-                if (id == this.postValue.id) {
-                    // update local storage
-                    const user = { ...this.postValue, ...params };
-                    localStorage.setItem('user', JSON.stringify(user));
-
-                    // publish updated user to subscribers
-                    this.userSubject.next(user);
-                }
-                return x;
-            }));
+        return this.http.post(`${environment.apiUrl}/post/update/${id}`, params);
     }
 
     deletePost(id: string) {
-        return this.http.delete(`${environment.apiUrl}/post/${id}`)
-            .pipe(map(x => {
-                // auto logout if the logged in user deleted their own record
-                if (id == this.postValue.id) {
-                    this.logout();
-                }
-                return x;
-            }));
+        return this.http.post(`${environment.apiUrl}/post/delete/${id}`, id);
     }
     
     getUserType(id: string): any {
         return this.http.get(`${environment.apiUrl}/user/${id}`);
     }
 
-    uploadCV(fileToUpload: File) {
+    uploadCV(userId, fileToUpload) {
         const formData: FormData = new FormData();
         formData.append('fileKey', fileToUpload, fileToUpload.name);
-        return this.http.post(`${environment.apiUrl}/upload/cv`, formData);
+        console.log(formData);
+        return this.http.post(`${environment.apiUrl}/user/resume/${userId}`, formData);
     }
 
-    applyToPost(postId: string, userId: number) {
-        return this.http.post(`${environment.apiUrl}/applyToPost/postId/${postId}/userId/${userId}`, postId);
+
+
+    applyToPost(postId, userid) {
+        return this.http.post(`${environment.apiUrl}/post/apply/${postId}`, userid);
     }
 }

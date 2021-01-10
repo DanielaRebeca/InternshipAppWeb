@@ -10,7 +10,7 @@ export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;
     submitted = false;
-    fileToUpload: File = null;
+    userType: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -22,12 +22,11 @@ export class RegisterComponent implements OnInit {
 
     ngOnInit() {
         this.form = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            username: ['', Validators.required],
-            password: ['', [Validators.required, Validators.minLength(6)]],
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
             email: ['', Validators.required],
-            phoneNumber: ['', Validators.required],
+            password: ['', [Validators.required, Validators.minLength(6)]],
+            phoneNumber: [null, Validators.required],
             address: [''],
             companyName: [''],
             userType: ['', Validators.required]
@@ -48,8 +47,6 @@ export class RegisterComponent implements OnInit {
             return;
         }
 
-        console.log(this.form.value);
-
         this.loading = true;
         this.accountService.register(this.form.value)
             .pipe(first())
@@ -64,17 +61,10 @@ export class RegisterComponent implements OnInit {
                 });
     }
 
-    handleFileInput(files: FileList) {
-        this.fileToUpload = files.item(0);
-        this.accountService.uploadCV(this.fileToUpload)
-        .pipe(first())
-        .subscribe(
-            data => {
-                this.alertService.success('CV uploaded succesfully', { keepAfterRouteChange: true });
-            },
-            error => {
-                this.alertService.error(error);
-                this.loading = false;
-            });
+    changeUserType(userType) {
+        if (userType.value == 'student')
+            this.userType = "student";
+        else
+            this.userType = "company";
     }
 }

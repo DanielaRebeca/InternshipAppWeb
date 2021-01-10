@@ -1,40 +1,40 @@
 ﻿<h1>Posts</h1>
-<a routerLink="add" *ngIf="userType == 'company'" class="btn btn-sm btn-success mb-2">Add Post</a>
+<a routerLink="add" *ngIf="userType == 'COMPANY'" class="btn btn-sm btn-success mb-2">Add Post</a>
 <table class="table table-striped">
-    <thead>
+    <thead *ngIf="posts">
         <tr>
-            <th style="width: 30%">Domain</th>
-            <th style="width: 30%">Requirements</th>
-            <th style="width: 30%">Duration</th>
-            <th style="width: 30%">Number Of Applicants</th>
-            <th style="width: 30%">Paid</th>
-            <th style="width: 30%">Information</th>
-            <th style="width: 30%">Company Email</th>
+            <th class="text nowrap">Domain</th>
+            <th class="text nowrap">Requirements</th>
+            <th class="text nowrap">Duration</th>
+            <th class="text nowrap">Number Of Applicants</th>
+            <th class="text nowrap">Paid</th>
+            <th class="text nowrap">Information</th>
+            <th class="text nowrap">Company Email</th>
+            <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody *ngIf="posts"> 
         <tr *ngFor="let post of posts">
-            <td>{{post.domain}}</td>
-            <td>{{post.requirements}}</td>
-            <td>{{post.duration}}</td>
-            <td>{{post.numberOfApplicants}}</td>
-            <td>{{post.paid}}</td>
-            <td>{{post.requirements}}</td>
-            <td>{{post.Information}}</td>
-            <td>{{post.companyEmail}}</td>
+            <td class="text nowrap">{{post.domain}}</td>
+            <td class="text nowrap">{{post.requirements}}</td>
+            <td class="text nowrap">{{post.duration}}</td>
+            <td class="text nowrap">{{post.numberOfApplicants}}</td>
+            <td class="text nowrap">{{post.paid}}</td>
+            <td class="text nowrap">{{post.information}}</td>
+            <td class="text nowrap">{{post.companyEmail}}</td>
             <td style="white-space: nowrap">
-                <a routerLink="edit/{{post.id}}" class="btn btn-sm btn-primary mr-1" *ngIf="userType == 'company'">Edit</a>
-                <button (click)="deletePost(post.id)" class="btn btn-sm btn-danger" [disabled]="post.isDeleting" *ngIf="userType == 'company'">
+                <a routerLink="/posts/edit/{{post.id}}" class="btn btn-sm btn-primary mr-1" *ngIf="userType == 'COMPANY'">Edit</a>
+                <button (click)="deletePost(post.id)" class="btn btn-sm btn-danger" [disabled]="post.isDeleting"
+                    *ngIf="userType == 'COMPANY'">
                     <span *ngIf="post.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!post.isDeleting">Delete</span>
                 </button>
-                <button (click)="applyToPost(post.id)" class="btn btn-sm btn-primary" *ngIf="userType == 'student'">Apply to post!</button>
-            </td>
-        </tr>
-        <tr *ngIf="!posts">
-            <td colspan="4" class="text-center">
-                <span class="spinner-border spinner-border-lg align-center"></span>
+                <button (click)="applyToPost(post.id)" class="btn btn-sm btn-primary" *ngIf="userType == 'STUDENT'">Apply to
+                    post!</button>
             </td>
         </tr>
     </tbody>
+    <div *ngIf="!posts" class="text-center">
+        <h1>Sorry, there are no available posts</h1>
+    </div>
 </table>

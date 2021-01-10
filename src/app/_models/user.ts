@@ -1,14 +1,13 @@
 ﻿export class User {
     id: string;
-    username: string;
+    email: string;
     password: string;
-    firstName: string;
-    lastName: string;
-    email:string;
-    phoneNumber: string;
+    name: string;
+    surname: string;
+    phoneNumber: number;
     address: string;
     companyName: string;
     userType: string;
-    documents: string
-    token: string;
+    documents: string;
+    resumePath: string;
 }

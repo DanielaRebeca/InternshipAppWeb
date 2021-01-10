@@ -12,18 +12,7 @@ export class AppComponent implements OnInit{
         this.accountService.user.subscribe(x => this.user = x);
     }
     ngOnInit(): void {
-        console.log(this.user);
-        this.getUserType(this.user.id);
-    }
-
-    getUserType(id) {
-        this.accountService.getUserType(id).subscribe(result => {
-            if (result == 'student')
-                this.userType == 'student';
-            else
-                this.userType == 'company';
-        })
-        this.userType = 'student';
+        this.userType = JSON.parse(localStorage.getItem('user')).type;
     }
 
     logout() {

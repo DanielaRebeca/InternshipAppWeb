@@ -9,9 +9,12 @@ import { AccountService, AlertService } from '@app/_services';
 export class AddEditComponent implements OnInit {
     form: FormGroup;
     id: string;
-    isAddMode: boolean;
+    isAddMode: boolean = true;
     loading = false;
     submitted = false;
+    userType: string;
+    userId: string;
+    addNewPost: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -23,26 +26,23 @@ export class AddEditComponent implements OnInit {
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
-        this.isAddMode = !this.id;
-        
-        // password not required in edit mode
-        const passwordValidators = [Validators.minLength(6)];
-        if (this.isAddMode) {
-            passwordValidators.push(Validators.required);
-        }
+        this.userId = JSON.parse(localStorage.getItem('user')).id;
+        this.userType = JSON.parse(localStorage.getItem('user')).type;
+        //this.isAddMode = !this.id;
 
         this.form = this.formBuilder.group({
             domain: ['', Validators.required],
             requirements: ['', Validators.required],
             duration: [0, Validators.required],
-            numberOfApplicants: [0, passwordValidators],
+            numberOfApplicants: [0],
             paid: [false, Validators.required],
             information: ['', Validators.required],
             companyEmail: ['', Validators.required],
+            creator:[JSON.parse(localStorage.getItem('user'))]
         });
 
-        if (!this.isAddMode) {
-            this.accountService.getPostById(this.id)
+        if(this.id) {
+            this.accountService.getOnePostById(this.id)
                 .pipe(first())
                 .subscribe(x => {
                     this.f.domain.setValue(x.domain);
@@ -52,6 +52,23 @@ export class AddEditComponent implements OnInit {
                     this.f.paid.setValue(x.paid);
                     this.f.information.setValue(x.information);
                     this.f.companyEmail.setValue(x.companyEmail);
+                    //this.f.creator.setValue(this.id);
+                });
+            this.isAddMode = false;
+        }
+
+        if (this.isAddMode) {
+            this.accountService.getPostById(this.userId, this.userType)
+                .pipe(first())
+                .subscribe(x => {
+                    this.f.domain.setValue(x[0].domain);
+                    this.f.requirements.setValue(x[0].requirements);
+                    this.f.duration.setValue(x[0].duration);
+                    this.f.numberOfApplicants.setValue(x[0].numberOfApplicants);
+                    this.f.paid.setValue(x[0].paid);
+                    this.f.information.setValue(x[0].information);
+                    this.f.companyEmail.setValue(x[0].companyEmail);
+                    //this.f.creator.setValue(this.id);
                 });
         }
     }

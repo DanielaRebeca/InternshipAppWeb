@@ -2,9 +2,10 @@
     id: string;
     domain: string;
     requirements: string;
-    duration: DoubleRange;
+    duration: Int32Array;
     numberOfApplicants: Int32Array;
     paid: boolean;
     information: string;
     companyEmail: string;
+    creator: string;
 }

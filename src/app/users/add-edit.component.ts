@@ -13,6 +13,7 @@ export class AddEditComponent implements OnInit {
     loading = false;
     submitted = false;
     userType: string;
+    fileToUpload: any = null;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -24,40 +25,31 @@ export class AddEditComponent implements OnInit {
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
-        this.getUserType(this.id);
+        this.userType = JSON.parse(localStorage.getItem('user')).type;
         this.isAddMode = !this.id;
         
-        // password not required in edit mode
+        // password not required in edit modes
         const passwordValidators = [Validators.minLength(6)];
         if (this.isAddMode) {
             passwordValidators.push(Validators.required);
         }
 
         this.form = this.formBuilder.group({
-            firstName: ['', Validators.required],
-            lastName: ['', Validators.required],
-            username: ['', Validators.required],
-            password: ['', passwordValidators],
-            email: ['', Validators.required],
-            phoneNumber: ['', Validators.required],
+            name: ['', Validators.required],
+            surname: ['', Validators.required],
+            //email: ['', Validators.required],
+            phoneNumber: [null, Validators.required],
             address: [''],
-            companyName: [''],
-            userType: ['', Validators.required],
+            companyName: ['']
         });
 
         if (!this.isAddMode) {
-            this.accountService.getById(this.id)
-                .pipe(first())
-                .subscribe(x => {
-                    this.f.firstName.setValue(x.firstName);
-                    this.f.lastName.setValue(x.lastName);
-                    this.f.username.setValue(x.username);
-                    this.f.email.setValue(x.email);
-                    this.f.phoneNumber.setValue(x.phoneNumber);
-                    this.f.address.setValue(x.address);
-                    this.f.companyName.setValue(x.companyName);
-                    this.f.userType.setValue(x.userType);
-                });
+            this.f.name.setValue(JSON.parse(localStorage.getItem('user')).name);
+            this.f.surname.setValue(JSON.parse(localStorage.getItem('user')).surname);
+            //this.f.email.setValue(JSON.parse(localStorage.getItem('user')).email);
+            this.f.phoneNumber.setValue(JSON.parse(localStorage.getItem('user')).phoneNumber);
+            this.f.address.setValue(JSON.parse(localStorage.getItem('user')).address);
+            this.f.companyName.setValue(JSON.parse(localStorage.getItem('user')).companyName);
         }
     }
 
@@ -89,7 +81,7 @@ export class AddEditComponent implements OnInit {
             .subscribe(
                 data => {
                     this.alertService.success('User added successfully', { keepAfterRouteChange: true });
-                    this.router.navigate(['.', { relativeTo: this.route }]);
+                    this.router.navigate(['', { relativeTo: this.route }]);
                 },
                 error => {
                     this.alertService.error(error);
@@ -103,7 +95,8 @@ export class AddEditComponent implements OnInit {
             .subscribe(
                 data => {
                     this.alertService.success('Update successful', { keepAfterRouteChange: true });
-                    this.router.navigate(['..', { relativeTo: this.route }]);
+                    this.loading = false;
+                    //this.router.navigate(['', { relativeTo: this.route }]);
                 },
                 error => {
                     this.alertService.error(error);
@@ -111,13 +104,49 @@ export class AddEditComponent implements OnInit {
                 });
     }
 
-    getUserType(id) {
-        this.accountService.getUserType(id).subscribe(result => {
-            if (result == 'student')
-                this.userType == 'student';
-            else
-                this.userType == 'company';
-        })
-        this.userType = 'student';
+    handleFileInput(event) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.fileToUpload = file;
+        }
+        console.log(this.fileToUpload);
+        var reader = new FileReader();
+        var sth = reader.readAsArrayBuffer(this.fileToUpload);
+        console.log(sth);
+        this.accountService.uploadCV(this.id, this.fileToUpload)
+            .pipe(first())
+            .subscribe(
+                data => {
+                    this.alertService.success('CV uploaded succesfully', { keepAfterRouteChange: true });
+                },
+                error => {
+                    this.alertService.error(error);
+                    this.loading = false;
+                });
     }
+
+    // handleFileInput(event) {
+    //     let fileList: FileList = event.target.files;
+    //     if (fileList.length > 0) {
+    //         let file: File = fileList[0];
+    //         let formData: FormData = new FormData();
+    //         console.log(file);
+    //         formData.append('uploadFile', new Blob([file], { type: file.type }), file.name);
+    //         let headers = new Headers();
+    //         /** In Angular 5, including the header Content-Type can invalidate your request */
+    //         headers.append('Content-Type', 'multipart/form-data');
+    //         headers.append('Accept', 'application/json');
+    //         this.accountService.uploadCV(this.id, formData)
+    //         .pipe(first())
+    //         .subscribe(
+    //             data => {
+    //                 this.alertService.success('CV uploaded succesfully', { keepAfterRouteChange: true });
+    //             },
+    //             error => {
+    //                 this.alertService.error(error);
+    //                 this.loading = false;
+    //             });
+    //     }
+    // }
+
 }
