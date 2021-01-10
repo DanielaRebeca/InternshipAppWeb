@@ -17,10 +17,16 @@ export class ListComponent implements OnInit {
         this.accountService.getPostById(this.userId, this.userType)
             .pipe(first())
             .subscribe(posts => {
-                if (this.posts) {
+                if (posts) {
                     this.posts = posts;
                 }
             });
+        this.posts.forEach(post => {
+            if (post.paid == false)
+                post.paid = "false";
+            else
+                post.paid = "true";
+        });
 
     }
 

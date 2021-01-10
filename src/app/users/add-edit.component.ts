@@ -14,6 +14,7 @@ export class AddEditComponent implements OnInit {
     submitted = false;
     userType: string;
     fileToUpload: any = null;
+    resumePath: string = "";
 
     constructor(
         private formBuilder: FormBuilder,
@@ -26,6 +27,7 @@ export class AddEditComponent implements OnInit {
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
         this.userType = JSON.parse(localStorage.getItem('user')).type;
+        this.resumePath = JSON.parse(localStorage.getItem('resumePath'));
         this.isAddMode = !this.id;
         
         // password not required in edit modes
@@ -109,10 +111,6 @@ export class AddEditComponent implements OnInit {
             const file = event.target.files[0];
             this.fileToUpload = file;
         }
-        console.log(this.fileToUpload);
-        var reader = new FileReader();
-        var sth = reader.readAsArrayBuffer(this.fileToUpload);
-        console.log(sth);
         this.accountService.uploadCV(this.id, this.fileToUpload)
             .pipe(first())
             .subscribe(
@@ -124,29 +122,5 @@ export class AddEditComponent implements OnInit {
                     this.loading = false;
                 });
     }
-
-    // handleFileInput(event) {
-    //     let fileList: FileList = event.target.files;
-    //     if (fileList.length > 0) {
-    //         let file: File = fileList[0];
-    //         let formData: FormData = new FormData();
-    //         console.log(file);
-    //         formData.append('uploadFile', new Blob([file], { type: file.type }), file.name);
-    //         let headers = new Headers();
-    //         /** In Angular 5, including the header Content-Type can invalidate your request */
-    //         headers.append('Content-Type', 'multipart/form-data');
-    //         headers.append('Accept', 'application/json');
-    //         this.accountService.uploadCV(this.id, formData)
-    //         .pipe(first())
-    //         .subscribe(
-    //             data => {
-    //                 this.alertService.success('CV uploaded succesfully', { keepAfterRouteChange: true });
-    //             },
-    //             error => {
-    //                 this.alertService.error(error);
-    //                 this.loading = false;
-    //             });
-    //     }
-    // }
 
 }

@@ -9,12 +9,11 @@ import { AccountService, AlertService } from '@app/_services';
 export class AddEditComponent implements OnInit {
     form: FormGroup;
     id: string;
-    isAddMode: boolean = true;
+    isAddMode: boolean;
     loading = false;
     submitted = false;
     userType: string;
     userId: string;
-    addNewPost: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -35,7 +34,7 @@ export class AddEditComponent implements OnInit {
             requirements: ['', Validators.required],
             duration: [0, Validators.required],
             numberOfApplicants: [0],
-            paid: [false, Validators.required],
+            paid: ["false", Validators.required],
             information: ['', Validators.required],
             companyEmail: ['', Validators.required],
             creator:[JSON.parse(localStorage.getItem('user'))]
@@ -49,28 +48,39 @@ export class AddEditComponent implements OnInit {
                     this.f.requirements.setValue(x.requirements);
                     this.f.duration.setValue(x.duration);
                     this.f.numberOfApplicants.setValue(x.numberOfApplicants);
-                    this.f.paid.setValue(x.paid);
+                    if(x.paid == false)
+                    {
+                        this.f.paid.setValue("false");
+                    }
+                    else
+                    {
+                        this.f.paid.setValue("true");
+                    }
                     this.f.information.setValue(x.information);
                     this.f.companyEmail.setValue(x.companyEmail);
                     //this.f.creator.setValue(this.id);
                 });
             this.isAddMode = false;
         }
-
-        if (this.isAddMode) {
-            this.accountService.getPostById(this.userId, this.userType)
-                .pipe(first())
-                .subscribe(x => {
-                    this.f.domain.setValue(x[0].domain);
-                    this.f.requirements.setValue(x[0].requirements);
-                    this.f.duration.setValue(x[0].duration);
-                    this.f.numberOfApplicants.setValue(x[0].numberOfApplicants);
-                    this.f.paid.setValue(x[0].paid);
-                    this.f.information.setValue(x[0].information);
-                    this.f.companyEmail.setValue(x[0].companyEmail);
-                    //this.f.creator.setValue(this.id);
-                });
+        else
+        {
+            this.isAddMode = true;
         }
+
+        // if (this.isAddMode) {
+        //     this.accountService.getPostById(this.userId, this.userType)
+        //         .pipe(first())
+        //         .subscribe(x => {
+        //             this.f.domain.setValue(x[0].domain);
+        //             this.f.requirements.setValue(x[0].requirements);
+        //             this.f.duration.setValue(x[0].duration);
+        //             this.f.numberOfApplicants.setValue(x[0].numberOfApplicants);
+        //             this.f.paid.setValue(x[0].paid);
+        //             this.f.information.setValue(x[0].information);
+        //             this.f.companyEmail.setValue(x[0].companyEmail);
+        //             //this.f.creator.setValue(this.id);
+        //         });
+        // }
     }
 
     // convenience getter for easy access to form fields

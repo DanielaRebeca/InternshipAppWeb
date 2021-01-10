@@ -3,7 +3,7 @@
         <div *ngIf="userType == 'COMPANY'">
             <h1>Hi {{user.name}}!</h1>
             <p>Welcome to our Internip App!</p>
-            <p>You can edit your account information or create new posts!</p>
+            <p>You can edit your account information or create/edit/delete posts!</p>
             <p>Below, you have all your account information. Also, in the header ('Posts') you have a list with all your posts.</p>
             <p><a routerLink="/users/edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit My Account Information</a></p>
             <p><a routerLink="/posts" class="btn btn-sm btn-primary mr-1">Edit My Posts</a></p>

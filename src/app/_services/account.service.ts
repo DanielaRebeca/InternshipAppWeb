@@ -80,11 +80,6 @@ export class AccountService {
     }
 
     update(userId, params) {
-        // const headers = {
-        //     headers: new HttpHeaders({
-        //       'Access-Control-Allow-Origin': ''
-        //     })
-        //   };
         return this.http.post(`${environment.apiUrl}/user/update/${userId}`, params)
             .pipe(map(x => {
                 // update stored user if the logged in user updated their own record
@@ -125,12 +120,10 @@ export class AccountService {
 
     uploadCV(userId, fileToUpload) {
         const formData: FormData = new FormData();
-        formData.append('fileKey', fileToUpload, fileToUpload.name);
-        console.log(formData);
+        formData.append('resume', fileToUpload);
+        localStorage.setItem('resumePath', JSON.stringify(fileToUpload.name));
         return this.http.post(`${environment.apiUrl}/user/resume/${userId}`, formData);
     }
-
-
 
     applyToPost(postId, userid) {
         return this.http.post(`${environment.apiUrl}/post/apply/${postId}`, userid);
