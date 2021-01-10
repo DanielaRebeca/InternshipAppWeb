@@ -1,5 +1,5 @@
 ﻿<h1>Posts</h1>
-<a routerLink="add" class="btn btn-sm btn-success mb-2">Add Post</a>
+<a routerLink="add" *ngIf="userType == 'company'" class="btn btn-sm btn-success mb-2">Add Post</a>
 <table class="table table-striped">
     <thead>
         <tr>
@@ -23,11 +23,12 @@
             <td>{{post.Information}}</td>
             <td>{{post.companyEmail}}</td>
             <td style="white-space: nowrap">
-                <a routerLink="edit/{{post.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deletePost(post.id)" class="btn btn-sm btn-danger" [disabled]="post.isDeleting">
+                <a routerLink="edit/{{post.id}}" class="btn btn-sm btn-primary mr-1" *ngIf="userType == 'company'">Edit</a>
+                <button (click)="deletePost(post.id)" class="btn btn-sm btn-danger" [disabled]="post.isDeleting" *ngIf="userType == 'company'">
                     <span *ngIf="post.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!post.isDeleting">Delete</span>
                 </button>
+                <button (click)="applyToPost(post.id)" class="btn btn-sm btn-primary" *ngIf="userType == 'student'">Apply to post!</button>
             </td>
         </tr>
         <tr *ngIf="!posts">

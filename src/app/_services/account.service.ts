@@ -127,4 +127,18 @@ export class AccountService {
                 return x;
             }));
     }
+    
+    getUserType(id: string): any {
+        return this.http.get(`${environment.apiUrl}/user/${id}`);
+    }
+
+    uploadCV(fileToUpload: File) {
+        const formData: FormData = new FormData();
+        formData.append('fileKey', fileToUpload, fileToUpload.name);
+        return this.http.post(`${environment.apiUrl}/upload/cv`, formData);
+    }
+
+    applyToPost(postId: string, userId: number) {
+        return this.http.post(`${environment.apiUrl}/applyToPost/postId/${postId}/userId/${userId}`, postId);
+    }
 }

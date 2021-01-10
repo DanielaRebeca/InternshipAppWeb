@@ -12,6 +12,7 @@ export class AddEditComponent implements OnInit {
     isAddMode: boolean;
     loading = false;
     submitted = false;
+    userType: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -23,6 +24,7 @@ export class AddEditComponent implements OnInit {
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
+        this.getUserType(this.id);
         this.isAddMode = !this.id;
         
         // password not required in edit mode
@@ -107,5 +109,15 @@ export class AddEditComponent implements OnInit {
                     this.alertService.error(error);
                     this.loading = false;
                 });
+    }
+
+    getUserType(id) {
+        this.accountService.getUserType(id).subscribe(result => {
+            if (result == 'student')
+                this.userType == 'student';
+            else
+                this.userType == 'company';
+        })
+        this.userType = 'student';
     }
 }

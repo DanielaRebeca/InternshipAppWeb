@@ -1,7 +1,9 @@
 ﻿<div class="p-4">
     <div class="container">
         <h1>Hi {{user.firstName}}!</h1>
-        <p>Welcome to ...</p>
-        <p><a routerLink="/users">Manage Users</a></p>
+        <p>Welcome to our Internip App!</p>
+        <p>You can edit your account information or apply to any posts !</p>
+        <p>Below, you have all your account information. Also, in the header ('Posts') you have a list with all the post available. Please apply where you want to.</p>
+        <p><a routerLink="/users/edit/{{user.id}}" class="btn btn-sm btn-primary mr-1">Edit My Account Information</a></p>
     </div>
 </div>

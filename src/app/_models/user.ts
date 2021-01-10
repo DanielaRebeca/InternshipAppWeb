@@ -9,5 +9,6 @@
     address: string;
     companyName: string;
     userType: string;
+    documents: string
     token: string;
 }

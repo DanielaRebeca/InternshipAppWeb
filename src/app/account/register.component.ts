@@ -10,6 +10,7 @@ export class RegisterComponent implements OnInit {
     form: FormGroup;
     loading = false;
     submitted = false;
+    fileToUpload: File = null;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -61,5 +62,19 @@ export class RegisterComponent implements OnInit {
                     this.alertService.error(error);
                     this.loading = false;
                 });
+    }
+
+    handleFileInput(files: FileList) {
+        this.fileToUpload = files.item(0);
+        this.accountService.uploadCV(this.fileToUpload)
+        .pipe(first())
+        .subscribe(
+            data => {
+                this.alertService.success('CV uploaded succesfully', { keepAfterRouteChange: true });
+            },
+            error => {
+                this.alertService.error(error);
+                this.loading = false;
+            });
     }
 }

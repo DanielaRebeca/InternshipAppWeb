@@ -33,7 +33,7 @@
             </div>
         </div>
     </div>
-    <div class="form-row">
+    <div class="form-row" *ngIf="userType == 'company'">
         <div class="form-group col">
             <label for="companyName">Company Name</label>
             <input type="text" formControlName="companyName" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.companyName.errors }" />

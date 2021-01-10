@@ -17,6 +17,51 @@
             </div>
         </div>
     </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="duration">Duration</label>
+            <input type="number" formControlName="duration" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }" />
+            <div *ngIf="submitted && f.duration.errors" class="invalid-feedback">
+                <div *ngIf="f.duration.errors.required">Duration is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="numberOfApplicants">Number Of Applicants</label>
+            <input type="number" formControlName="numberOfApplicants" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.numberOfApplicants.errors }" />
+            <div *ngIf="submitted && f.numberOfApplicants.errors" class="invalid-feedback">
+                <div *ngIf="f.numberOfApplicants.errors.required">Number Of Applicants</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="paid">Paid</label> &nbsp;
+            <div class="row col-md-6">
+                <input type="radio" value="true" class="ml-3" formControlName="paid"> Yes &nbsp;
+                <input type="radio" value="false" class="ml-3" formControlName="paid"> No
+            </div>
+               
+            <div *ngIf="submitted && f.paid.errors" class="invalid-feedback">
+                <div *ngIf="f.paid.errors.required">Paid is required</div>
+            </div>
+        </div>
+        <div class="form-group col">
+            <label for="companyEmail">Company Email</label>
+            <input type="email" formControlName="companyEmail" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.companyEmail.errors }" />
+            <div *ngIf="submitted && f.companyEmail.errors" class="invalid-feedback">
+                <div *ngIf="f.companyEmail.errors.required">Company Email</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col">
+            <label for="information">Information</label>
+            <input type="email" formControlName="information" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.information.errors }" />
+            <div *ngIf="submitted && f.information.errors" class="invalid-feedback">
+                <div *ngIf="f.information.errors.required">Information</div>
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <button [disabled]="loading" class="btn btn-primary">
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>

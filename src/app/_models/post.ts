@@ -4,7 +4,7 @@
     requirements: string;
     duration: DoubleRange;
     numberOfApplicants: Int32Array;
-    paid:boolean;
+    paid: boolean;
     information: string;
     companyEmail: string;
 }
