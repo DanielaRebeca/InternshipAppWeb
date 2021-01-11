@@ -41,7 +41,7 @@ export class ListComponent implements OnInit {
         }
         else
         {
-            this.posts = this.posts.filter(f => f.domain == search);
+            this.posts = this.posts.filter(f => f.domain.toLowerCase() == search.toLowerCase());
         }
     }
 
