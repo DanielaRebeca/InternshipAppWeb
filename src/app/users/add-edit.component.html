@@ -51,13 +51,13 @@
         <a routerLink="" class="btn btn-link">Cancel</a>
     </div>
     <div class="form-group" *ngIf="userType == 'STUDENT'">
-        <div *ngIf="resumePath == ''">
+        <div>
             <label for="file"> Upload CV </label>&nbsp;
             <input type="file" id="file" (change)="handleFileInput($event)">
         </div>
-        <div *ngIf="resumePath != ''">
+        <!-- <div *ngIf="resumePath != ''">
             <span>You already Upload your CV!</span><br>
             {{resumePath}}
-        </div>
+        </div> -->
     </div>
 </form>
