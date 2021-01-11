@@ -2,12 +2,15 @@
 import { first } from 'rxjs/operators';
 
 import { AccountService, AlertService } from '@app/_services';
+import { IfStmt } from '@angular/compiler';
 
 @Component({ templateUrl: 'list.component.html' })
 export class ListComponent implements OnInit {
     posts: any = [];
+    postsTemp: any = [];
     userId = 0;
     userType: string = '';
+    search: string = "";
 
     constructor(private accountService: AccountService, private alertService: AlertService) {}
 
@@ -19,6 +22,7 @@ export class ListComponent implements OnInit {
             .subscribe(posts => {
                 if (posts) {
                     this.posts = posts;
+                    this.postsTemp = posts;
                 }
             });
         this.posts.forEach(post => {
@@ -28,6 +32,17 @@ export class ListComponent implements OnInit {
                 post.paid = "true";
         });
 
+    }
+
+    searchPosts(search) {
+        if(search == "")
+        {
+            this.posts = this.postsTemp;
+        }
+        else
+        {
+            this.posts = this.posts.filter(f => f.domain == search);
+        }
     }
 
     deletePost(id: string) {

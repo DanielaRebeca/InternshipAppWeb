@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 import { LayoutComponent } from './layout.component';
@@ -11,7 +11,8 @@ import { PostsRoutingModule } from './posts-routing.module';
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        PostsRoutingModule
+        PostsRoutingModule,
+        FormsModule
     ],
     declarations: [
         LayoutComponent,
